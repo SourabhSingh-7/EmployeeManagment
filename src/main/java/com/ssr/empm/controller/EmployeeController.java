@@ -61,6 +61,8 @@ public class EmployeeController {
             @RequestParam("sortField") String sortField,
             @RequestParam("sortDir") String sortDir,
             Model model) {
+    	
+    	
         int pageSize = 5;
 
         Page<Employee> page = employeeService.findPaginated(pageNo, pageSize, sortField, sortDir);
@@ -75,6 +77,8 @@ public class EmployeeController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("listEmployees", listEmployees);
+        System.out.println("Employees being sent to view: " + listEmployees.size());
+    	listEmployees.forEach(e -> System.out.println(e.getFirstName()));
         return "index";
     }
 
