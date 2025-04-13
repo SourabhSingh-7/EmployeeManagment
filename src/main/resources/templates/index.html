@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Employee Management System</h4>
+            <a class="btn btn-light btn-sm" th:href="@{/showNewEmployeeForm}">
+                <i class="fa fa-plus"></i> Add Employee
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div th:if="${employees != null}">
+                <table class="table table-hover table-bordered align-middle text-center">
+					<thead class="table-light">
+					    <tr>
+					        <th>
+					            <a th:href="@{/page/1(sortField='firstName', sortDir=${reverseSortDir})}" class="text-decoration-none text-dark">First Name</a>
+					        </th>
+					        <th>
+					            <a th:href="@{/page/1(sortField='lastName', sortDir=${reverseSortDir})}" class="text-decoration-none text-dark">Last Name</a>
+					        </th>
+					        <th>
+					            <a th:href="@{/page/1(sortField='email', sortDir=${reverseSortDir})}" class="text-decoration-none text-dark">Email</a>
+					        </th>
+					        <th>Actions</th>
+					    </tr>
+					</thead>
+
+                    <tbody>
+                        <tr th:each="employee : ${listEmployees}">
+                            <td th:text="${employee.firstName}">First Name</td>
+                            <td th:text="${employee.lastName}">Last Name</td>
+                            <td th:text="${employee.email}">Email</td>
+                            <td>
+                                <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+                                <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:if="${currentPage > 1}">
+                            <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${currentPage - 1})}">Previous</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${i})}" th:text="${i}">1</a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage < totalPages}">
+                            <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${currentPage + 1})}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+			<div th:if="${listEmployees == null or #lists.isEmpty(listEmployees)}" class="text-center text-muted">
+			    No employee data found.
+			</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
